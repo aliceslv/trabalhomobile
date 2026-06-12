@@ -1,0 +1,104 @@
+
+-- BANCO DE DADOS: VITA
+-- MySQL
+
+
+CREATE DATABASE IF NOT EXISTS vita;
+USE vita;
+
+-- TABELA: USUARIO
+
+CREATE TABLE USUARIO (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    senha VARCHAR(255) NOT NULL,
+    criado_em DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- TABELA: PERFIL
+
+CREATE TABLE PERFIL (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    nome VARCHAR(100) NOT NULL,
+    data_nasc DATE,
+    sexo VARCHAR(20),
+    peso DECIMAL(5,2),
+    altura DECIMAL(5,2),
+    FOREIGN KEY (id_usuario) REFERENCES USUARIO(id)
+);
+
+-- TABELA: META
+
+CREATE TABLE META (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    tipo VARCHAR(50),
+    peso_meta DECIMAL(5,2),
+    FOREIGN KEY (id_usuario) REFERENCES USUARIO(id)
+);
+
+-- TABELA: NIVEL_EXERCICIO
+
+CREATE TABLE NIVEL_EXERCICIO (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    frequencia VARCHAR(50),
+    FOREIGN KEY (id_usuario) REFERENCES USUARIO(id)
+);
+
+-- TABELA: ALIMENTO
+
+CREATE TABLE ALIMENTO (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome_alimento VARCHAR(100) NOT NULL,
+    calorias_cemgramas DECIMAL(7,2),
+    proteinas DECIMAL(5,2),
+    carboidratos DECIMAL(5,2),
+    gorduras DECIMAL(5,2)
+);
+
+-- TABELA: REFEICAO
+
+CREATE TABLE REFEICAO (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    data DATE NOT NULL,
+    calorias_total DECIMAL(7,2),
+    tipo VARCHAR(50),
+    FOREIGN KEY (id_usuario) REFERENCES USUARIO(id)
+);
+
+-- TABELA: REFEICAO_ALIMENTO
+
+CREATE TABLE REFEICAO_ALIMENTO (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_refeicao INT NOT NULL,
+    id_alimento INT NOT NULL,
+    peso_comida DECIMAL(7,2),
+    FOREIGN KEY (id_refeicao) REFERENCES REFEICAO(id),
+    FOREIGN KEY (id_alimento) REFERENCES ALIMENTO(id)
+);
+
+-- TABELA: LEMBRETES
+
+CREATE TABLE LEMBRETES (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    titulo VARCHAR(100),
+    ativo TINYINT(1) DEFAULT 1,
+    tipo VARCHAR(50),
+    horario TIME,
+    FOREIGN KEY (id_usuario) REFERENCES USUARIO(id)
+);
+
+-- TABELA: CONFIGURACAO
+
+CREATE TABLE CONFIGURACAO (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    notificacao_ativa TINYINT(1) DEFAULT 1,
+    senha VARCHAR(255),
+    nova_senha VARCHAR(255),
+    FOREIGN KEY (id_usuario) REFERENCES USUARIO(id)
+);
